@@ -1,0 +1,18 @@
+{
+  "name": "webapp",
+  "version": "1.0.0",
+  "description": "Ajou WSDG4 - webapp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.ajou.ac.kr:WSDG4/webapp.git"
+  },
+  "author": "Ajou WSGD4",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
