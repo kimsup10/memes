@@ -1,6 +1,6 @@
 var express = require('express');
 var multer = require('multer');
-var db_client = require('..utils/database.js');
+var db = require('../utils/database.js');
 
 // TODO: Storage Handling Service 분리
 var storage = multer.diskStorage({
@@ -21,9 +21,9 @@ router.get('/', function (req, res) {
 router.post('/', upload.array('image'), function (req, res) {
     // TODO : add desciptoin and tags in insert query
     for ( var i in req.files ) {
-        query = db_client.query(
-            'INSERT INTO attachments(filesize, filepath) values ($1, $2)',
-            [req.files[i].size, req.files[i].path]
+        query = db.query(
+            "INSERT INTO attachments(filesize, filepath) values (?, ?)",
+            { replacements: [req.files[i].size, req.files[i].path] }
         );
     }
     res.redirect('back');

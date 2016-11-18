@@ -1,8 +1,10 @@
-var pg = require('pg');
-var connectionsString = process.env.DATABASE_URL || 'postgres://localhost:5432/meme';
-var client = new pg.Client(connectionsString);
+var Sequelize = require('sequelize');
+var db = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost:5432/meme', {
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 10000
+  },
+});
 
-// TODO: Connection Pool 구현할것
-client.connect();
-
-module.exports = client;
+module.exports = db;
