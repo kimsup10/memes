@@ -1,18 +1,13 @@
-doctype html
-html
-    head
-        title= title
-        link(rel='stylesheet', href='/stylesheets/style.css')
-        script(type='text/javascript' src='/javascripts/uploadingFile.js')
-        link(href="//maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" rel="stylesheet")
-        script(src="//code.jquery.com/jquery-1.11.3.min.js")
-    body
-        form(method="post" enctype="multipart/form-data")
-            div(class="input-group")
-                input(class='form-control' value="이미지 파일 업로드" disabled="disabled")
-                label(class="input-group-btn")
-                    span(class="btn btn-primary") 찾아보기
-                        input(class="uploadImg" type="file" style="display: none;" name="image" multiple)
-            br
-            div(class="uploadImgList")
-            button(class="btn btn-primary", name='apply') 제출
+extends layout
+
+block content
+  script(type='text/javascript' src='/javascripts/uploadingFile.js')
+  form(method="post" enctype="multipart/form-data")
+    div.input-group
+      input.form-control(value="이미지 파일 업로드" disabled="disabled")
+      label.input-group-btn
+        span.btn.btn-primary 찾아보기
+          input.uploadImg(type="file" style="display: none;" name="image" multiple)
+    br
+    div.uploadImgList
+    button.btn.btn-primary(name='apply') 제출
