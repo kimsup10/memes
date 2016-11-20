@@ -1,5 +1,6 @@
 var express = require('express');
 var multer = require('multer');
+var Attachment = require('../models/attachments.js');
 var db = require('../utils/database.js');
 
 // TODO: Storage Handling Service 분리
@@ -21,10 +22,12 @@ router.get('/', function (req, res) {
 router.post('/', upload.array('image'), function (req, res) {
     // TODO : add desciptoin and tags in insert query
     for ( var i in req.files ) {
-        query = db.query(
-            "INSERT INTO attachments(filesize, filepath) values (?, ?)",
-            { replacements: [req.files[i].size, req.files[i].path] }
-        );
+      Attachment.build(
+        {
+          filesize: req.files[i].size,
+          filepath: req.files[i].path
+        }
+      ).save();
     }
     res.redirect('back');
 });
