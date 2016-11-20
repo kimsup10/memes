@@ -1,7 +1,6 @@
 var express = require('express');
 var multer = require('multer');
 var Attachment = require('../models/attachments.js');
-var db = require('../utils/database.js');
 
 // TODO: Storage Handling Service 분리
 var storage = multer.diskStorage({
