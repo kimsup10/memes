@@ -10,6 +10,11 @@ $ npm install
 
 ## Run server
 ```bash
-$ node app.js
+$ npm start
 ```
-# Mac
+
+# Init DB
+문의후 진행
+```
+$ psql -U postgres meme < scripts/init_db.sql
+```
