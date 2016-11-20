@@ -6,4 +6,19 @@ html
     link(href='/stylesheets/bootstrap-3.3.6.min.css' rel='stylesheet')
     script(src='/javascripts/jquery-3.1.1.min.js')
   body
-    block content
+    nav.navbar.navbar-default.navbar-fixed-top
+      div.navbar-header
+        a.navbar-brand 짤방
+      div.navbar-right.navbar-collapse
+        form.navbar-form(action="/user/login", method="POST")
+          div.form-group
+            label(for="username") Id
+            input.form-control(name="username")
+          div.form-group
+            label(for="password") Password
+            input(type="password").form-control(name="password")
+          button.btn Login
+          a Sign Up
+
+    div.container
+      block content
