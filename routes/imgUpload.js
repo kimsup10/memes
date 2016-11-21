@@ -1,3 +1,4 @@
+
 var express = require('express');
 var Attachment = require('../models/attachments.js');
 var upload = require('../utils/multer');
@@ -10,7 +11,7 @@ router.get('/', function (req, res) {
 
 router.post('/submit', upload.array('image'), function (req, res) {
     // TODO : add desciptoin and tags in insert query
-    console.log(req.body);
+    console.log(req.body.tags);
     attachments = req.files.map(function(f){
         return {
             filesize: f.size,

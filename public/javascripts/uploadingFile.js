@@ -19,7 +19,7 @@ $(document).ready(function(){
         var reader = new FileReader();
         reader.onload = myOnload;
         reader.addEventListener('load', function () {
-            $('.uploads-display#'+(uploadCount++)).append('<input type="text" class="form-control" placeholder="'+file.name+'에 대해 해쉬태그와 함께 설명해주세요!"><br>' +
+            $('.uploads-display#'+(uploadCount++)).append('<input type="textarea" name ="tags" class="form-control" placeholder="'+file.name+'에 대해 해쉬태그와 함께 설명해주세요!"><br>' +
                 '<p class="btn-primary" name="cancel" onclick="removeAttachment(this.parentNode.id)">취소하기</p><br>');
         });
         reader.readAsDataURL(file);
