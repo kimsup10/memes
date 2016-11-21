@@ -20,15 +20,15 @@ router.get('/', function (req, res) {
 
 router.post('/', upload.array('image'), function (req, res) {
     // TODO : add desciptoin and tags in insert query
-    for ( var i in req.files ) {
-      Attachment.build(
-        {
-          filesize: req.files[i].size,
-          filepath: req.files[i].path
-        }
-      ).save();
-    }
-    res.redirect('back');
+    attachments = req.files.map(function(f){
+        return {
+            filesize: f.size,
+            filepath: f.path
+        };
+    });
+    Attachment.bulkCreate(attachments).then(function() {
+        res.redirect('back');
+    });
 });
 
 module.exports = router;
