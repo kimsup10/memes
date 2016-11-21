@@ -8,8 +8,9 @@ router.get('/', function (req, res) {
     res.render('imgUpload');
 });
 
-router.post('/', upload.array('image'), function (req, res) {
+router.post('/submit', upload.array('image'), function (req, res) {
     // TODO : add desciptoin and tags in insert query
+    console.log(req.body);
     attachments = req.files.map(function(f){
         return {
             filesize: f.size,
@@ -20,5 +21,9 @@ router.post('/', upload.array('image'), function (req, res) {
         res.redirect('back');
     });
 });
+/*
+router.post('/remove', function (req, res) {
+
+});*/
 
 module.exports = router;
