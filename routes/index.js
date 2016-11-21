@@ -12,4 +12,4 @@ module.exports = function (app) {
             res.render('index', { attachments: attachments });
         });
     });
-}
+};
