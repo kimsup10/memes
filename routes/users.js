@@ -7,21 +7,24 @@ router.get('/', function(req, res, next) {
     res.send('respond with a resource');
 });
 
-
-
 router.post('/login', function(req, res, next){
-
-    User.findAll({
+    User.findOne({
         where:{
             username: req.body["username"],
             password: req.body["password"]
         }
-    }).then(function(users) {
-        console.log(users);
-        res.redirect('/');
+    }).then(function(user) {
+        if(user) {
+            req.session.user_id = user.id;
+            req.session.username = user.username;
+        }
+        res.redirect('back');
     });
+});
 
-    //-res.render('login');
+router.post('/logout', function(req, res, next){
+    req.session.destroy();
+    res.redirect('back');
 });
 
 

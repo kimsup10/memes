@@ -1,15 +1,26 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var redis_client = require('./utils/redis.js');
 var users = require('./routes/users');
 var imgUpload = require('./routes/imgUpload');
 
-
 var app = express();
+
+app.use(session({
+  store: new RedisStore({client: redis_client, ttl: 60*60*24}),
+  secret: 'know your meme!',
+}));
+app.use(function(req,res,next){
+  res.locals.session = req.session;
+  next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
