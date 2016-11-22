@@ -7,8 +7,8 @@ block content
       input.form-control(value="이미지 파일 업로드" disabled="disabled")
       label.input-group-btn
         span.btn.btn-primary 찾아보기
-          input.uploadImg(type="file" style="display: none;" name="image" multiple)
+          input.uploadImg(type="file" id='attachFile' style="display: none;" name="image" multiple)
     br
     div.uploadImgList
 
-    button.btn.btn-primary(name='apply') 제출
+    button.btn.btn-primary(name='apply' disabled=true) 제출
