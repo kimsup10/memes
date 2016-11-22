@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS attachments CASCADE;
 
 CREATE TABLE users (
     id serial PRIMARY KEY,
-    username VARCHAR(25) NOT NULL,
+    username VARCHAR(25) NOT NULL UNIQUE,
     password VARCHAR(64) NOT NULL,
     email VARCHAR(64) NOT NULL,
     created_at timestamp NOT NULL DEFAULT now(),

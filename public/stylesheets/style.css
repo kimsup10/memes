@@ -33,3 +33,9 @@ a {
   width: 100%;
   height: auto;
 }
+
+#login-dp {
+  min-width: 250px;
+  padding: 14px;
+  overflow: hidden;
+}
