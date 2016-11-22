@@ -12,7 +12,5 @@ module.exports = function (app) {
         Attachment.findAll({limit: 10}).then(function(attachments) {
             res.render('index', { attachments: attachments });
         });
-
-
     });
 }
