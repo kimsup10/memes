@@ -9,12 +9,9 @@ router.get('/', function(req, res, next) {
 
 router.post('/login', function(req, res, next){
     User.findOne({
-        where:{
-            username: req.body["username"],
-            password: req.body["password"]
-        }
+        where:{ username: req.body["username"] }
     }).then(function(user) {
-        if(user) {
+        if(user && user.authenticate(req.body["password"])) {
             req.session.user_id = user.id;
             req.session.username = user.username;
         }
@@ -27,5 +24,22 @@ router.post('/logout', function(req, res, next){
     res.redirect('back');
 });
 
+router.get('/signup', function(req, res, next) {
+    res.render('signup');
+});
+
+router.post('/signup', function(req, res, next) {
+    User.create({
+        username: req.body["username"],
+        password: req.body["password"],
+        email: req.body["email"]
+    }).then(function(user) {
+        req.session.user_id = user.id;
+        req.session.username = user.username;
+        res.redirect('/');
+    }).catch(function(error) {
+        res.redirect('back');
+    });
+});
 
 module.exports = router;
