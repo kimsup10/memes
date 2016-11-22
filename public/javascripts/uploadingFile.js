@@ -1,7 +1,6 @@
 $(document).ready(function(){
     var imgTarget = $('.input-group .uploadImg');
-    var docsTarget = $('.input-group .uploadDocs');
-    var uploadId=0;
+
     imgTarget.on('change', function() {
         var files = $(this)[0].files;
         if (!$(this)[0].files[0].type.match(/image\//))
