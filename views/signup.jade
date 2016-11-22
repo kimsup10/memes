@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  form.form(method="POST")
+    div.form-group
+      label(for="username") ID
+      input.form-control(name="username", required)
+    div.form-group
+      label(for="password") Password
+      input.form-control(name="password", type="password", required)
+    div.form-group
+      label(for="password") Password confirm
+      input.form-control(name="password-confirm", type="password", required)
+    div.form-group
+      label(for="email") Email
+      input.form-control(name="email", type="email", required)
+    div.form-group
+        button.btn.btn-primary Sign up
+          span.glyphicon.glyphicon-userr
