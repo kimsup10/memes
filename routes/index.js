@@ -5,7 +5,7 @@ var Attachment = require('../models/attachments.js');
 
 module.exports = function (app) {
     app.use('/user', users);
-    app.use('/uploads', imgUpload);
+    app.use('/upload', imgUpload);
 
 
     app.get('/', function(req, res, next) {

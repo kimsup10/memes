@@ -6,7 +6,11 @@ var upload = require('../utils/multer');
 var router = express.Router();
 
 router.get('/', function (req, res) {
-    res.render('imgUpload');
+    if (req.session.user_id){
+        res.render('imgUpload');
+    } else
+        res.redirect('/');
+
 });
 
 router.post('/', upload.array('image'), function (req, res) {

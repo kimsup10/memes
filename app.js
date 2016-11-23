@@ -9,7 +9,6 @@ var bodyParser = require('body-parser');
 
 var redis_client = require('./utils/redis.js');
 var users = require('./routes/users');
-var imgUpload = require('./routes/imgUpload');
 
 var app = express();
 

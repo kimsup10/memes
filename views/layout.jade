@@ -15,8 +15,9 @@ html
         ul.nav.navbar-nav
           li
             a Trending
-          li.active
-            a(href='/uploads') Upload
+          li
+            if session.user_id
+              a(href='/upload') Upload
         form.navbar-form.navbar-left
           div.form-group
             input.form-control(placeholder="Search")
