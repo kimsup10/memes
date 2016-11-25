@@ -4,4 +4,5 @@ block content
   h1 짤방
   ul
     each attachment in attachments
-      li #{attachment.filepath} #{attachment.filesize}
+      div
+        img(src=attachment.filepath style="width: 512px; height: 256px;")
