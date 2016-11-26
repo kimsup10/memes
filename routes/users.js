@@ -44,17 +44,44 @@ router.post('/signup', function(req, res, next) {
 });
 
 
-router.get('/friends', function(req,res,next){
+router.get('/friends', function(req, res, next) {
     Friend.findAll({
-
-        where : {user_id : req.session.user_id}
-    }).then(funciton(friends){
-
+      where : {$or: [
+        {user_id: req.session.user_id},
+        {friend_id: req.session.user_id, accepted_at: null}
+      ]
+    }}).then(function(friends){
+        friend_ids = friends.map(function(f) {
+          if(f.user_id == req.session.user_id) {
+            return f.friend_id;
+          } else {
+            return f.user_id;
+          }
+        });
+        User.findAll({
+          where: {
+            id: {in: friend_ids}
+          }
+        }).then(function(users){
+          res.render('friend', {friends: users});
+        });
     });
-    res.render('friend');
+});
+
+router.post('/friends', function(req, res, next) {
+    User.findOne({where: {username: req.body["username"]}}).then(function(friend_user){
+      Friend.create({
+          user_id: req.session.user_id,
+          friend_id: friend_user.id
+      }).then(function(user) {
+          res.redirect('back');
+      })
+    }).catch(function(error) {
+        res.redirect('back');
+    });
 });
 
 router.get('/profile', function(req,res,next){
     res.render('signup');
-})
+});
 module.exports = router;

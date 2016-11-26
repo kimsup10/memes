@@ -1,7 +1,6 @@
 var Sequelize = require('sequelize');
 var bcrypt = require('bcrypt');
 var db = require('../utils/database.js');
-var User = require('../models/users.js');
 
 var Friend = db.define('friends', {
     id: {
@@ -10,10 +9,10 @@ var Friend = db.define('friends', {
         autoIncrement: true
     },
     user_id: Sequelize.INTEGER,
-    friend_id: Sequelize.INTEGER
-
+    friend_id: Sequelize.INTEGER,
+    accepted_at: Sequelize.TIME
+}, {
+    underscored: true
 });
-
-
 
 module.exports = Friend;

@@ -1,3 +1,14 @@
 extends layout
 
 block content
+    h1 친구목록
+    ul
+      each friend in friends
+        li= friend.username
+    h1 친구추가
+    form.form(method="POST")
+        div.form-group
+            label(for="username") 친구ID
+            input.form-control(name="username", placeholder="추가할 친구의 ID")
+        div.form-group
+            button.btn.btn-primary(type="submit") 친구신청

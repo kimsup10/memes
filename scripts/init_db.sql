@@ -35,6 +35,8 @@ CREATE TABLE friends (
     id serial PRIMARY KEY,
     user_id integer NOT NULL REFERENCES users(id),
     friend_id integer NOT NULL REFERENCES users(id),
+    accepted_at timestamp,
     created_at timestamp NOT NULL DEFAULT now(),
-    updated_at timestamp
+    updated_at timestamp,
+    CONSTRAINT friends_unique UNIQUE (user_id, friend_id)
 );
