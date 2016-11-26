@@ -10,7 +10,11 @@ var Meme = db.define('meme', {
     },
     user_id: Sequelize.INTEGER,
     description: Sequelize.STRING,
-    attachment_id: Sequelize.INTEGER
+    attachment_id: Sequelize.INTEGER,
+    privacy_level: {
+        type: Sequelize.ENUM('public', 'friends', 'private'),
+        defaultValue: 'public'
+    }
 }, {
     tableName: 'memes',
     underscored: true,

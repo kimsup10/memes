@@ -24,8 +24,9 @@ $(document).ready(function(){
         };
 
         reader.addEventListener('load', function () {
-            $('.uploads-display#'+thumbnailId).append('<input type="textarea" name ="description" class="form-control" onchange="enableApply()" placeholder="'+file.name+'에 대해 해쉬태그와 함께 설명해주세요!">' +
-                '<p class="btn-primary" name="cancel" onclick="removeAttachment(this.parentNode.id)">취소하기</p><br>');
+            $('.uploads-display#'+thumbnailId).append('<input name ="description" class="form-control" onchange="enableApply()" placeholder="'+file.name+'에 대해 해쉬태그와 함께 설명해주세요!">'
+                + '<select name="privacy_level"> <option value = "public">전체공개</option> <option value = "friends">친구공개</option> <option value = "private">비공개</option> </select>'
+                +'<button class="btn-danger btn" onclick="removeAttachment(this.parentNode.id)">취소하기</button><br>' );
         });
         reader.readAsDataURL(file);
     }

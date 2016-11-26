@@ -24,12 +24,17 @@ html
           button.btn.btn-default Submit
         ul.nav.navbar-nav.navbar-right
           if session.user_id
-            li
-              a #{session.username}
-                span.glyphicon.glyphicon-user
+            li.dropdown
+              a.dropdown-toggle(data-toggle="dropdown", href="#") #{session.username}
+                span.caret
+              ul.dropdown-menu
+                li(href="/user/friends")
+                  a 친구관리
+                li(href="/user/profile")
+                  a 프로필설정
             li
               form.navbar-form(action="/user/logout", method="POST")
-                button.btn Logout
+                button.btn Logout&nbsp;
                   span.glyphicon.glyphicon-log-out
           else
             li.dropdown

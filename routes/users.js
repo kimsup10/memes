@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/users.js');
+var Friend = require('../models/friends.js');
 
 // TODO: user page
 router.get('/', function(req, res, next) {
@@ -42,4 +43,18 @@ router.post('/signup', function(req, res, next) {
     });
 });
 
+
+router.get('/friends', function(req,res,next){
+    Friend.findAll({
+
+        where : {user_id : req.session.user_id}
+    }).then(funciton(friends){
+
+    });
+    res.render('friend');
+});
+
+router.get('/profile', function(req,res,next){
+    res.render('signup');
+})
 module.exports = router;

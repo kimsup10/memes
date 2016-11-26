@@ -1,6 +1,7 @@
 var Sequelize = require('sequelize');
 var bcrypt = require('bcrypt');
 var db = require('../utils/database.js');
+var Friend =require('../models/friends.js');
 
 var User = db.define('user', {
   id: {
@@ -31,7 +32,10 @@ var User = db.define('user', {
       else
         return false;
     }
-  },
+  }
 });
+
+User.hasMany(Friend,{ as: 'firends'});
+
 
 module.exports = User;

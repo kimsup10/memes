@@ -27,7 +27,8 @@ router.post('/', upload.array('image'), function (req, res) {
                     {
                         user_id: 1,
                         attachment_id: a[i].id,
-                        description: req.body.description[i]
+                        description: req.body.description[i],
+                        privacy_level: req.body.privacy_level[i]
                     }
                 );
             }
@@ -37,5 +38,7 @@ router.post('/', upload.array('image'), function (req, res) {
         }
     );
 });
+
+
 
 module.exports = router;
