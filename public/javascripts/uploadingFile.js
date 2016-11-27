@@ -2,12 +2,15 @@ $(document).ready(function(){
     var imgTarget = $('.input-group .uploadImg');
 
     imgTarget.on('change', function() {
+        console.log('here.....???');
+
         var files = $(this)[0].files;
         if (!$(this)[0].files[0].type.match(/image\//))
             return;
 
-        // 추출한 파일명 삽입
         for (var i in files ){
+            console.log('here.....');
+
             if(files.hasOwnProperty(i)) {
                 showPreview(files[i]);
             }
