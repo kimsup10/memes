@@ -4,7 +4,21 @@ block content
     h1 친구목록
     ul
       each friend in friends
-        li= friend.username
+        if friend.status == 'accepted'
+          li= friend.friend_user.username
+
+    h1 친구신청
+    ul
+      each friend in friends
+        if friend.status == 'waiting'
+          li= friend.friend_user.username
+            button.btn.btn-danger 신청취소
+        if friend.status == 'request'
+          li= friend.friend_user.username
+            form(method="POST")
+              input(type="hidden", name="user_id", value=friend.friend_id)
+              button.btn.btn-primary(name="action", value="accepted") 수락
+              button.btn.btn-danger(name="action", value="declined") 거절
     h1 친구추가
     form.form(method="POST")
         div.form-group

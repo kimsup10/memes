@@ -2,6 +2,8 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS memes CASCADE;
 DROP TABLE IF EXISTS attachments CASCADE;
 DROP TABLE IF EXISTS friends CASCADE;
+DROP TYPE IF EXISTS privacy_level;
+DROP TYPE IF EXISTS friend_status;
 
 CREATE TABLE users (
     id serial PRIMARY KEY,
@@ -31,11 +33,12 @@ CREATE TABLE memes (
     updated_at timestamp
 );
 
+CREATE TYPE friend_status AS ENUM ('waiting', 'request', 'declined', 'accepted');
 CREATE TABLE friends (
     id serial PRIMARY KEY,
     user_id integer NOT NULL REFERENCES users(id),
     friend_id integer NOT NULL REFERENCES users(id),
-    accepted_at timestamp,
+    status friend_status NOT NULL,
     created_at timestamp NOT NULL DEFAULT now(),
     updated_at timestamp,
     CONSTRAINT friends_unique UNIQUE (user_id, friend_id)

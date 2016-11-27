@@ -22,7 +22,6 @@ var User = db.define('user', {
     validate: {isEmail: true}
   }
 }, {
-  tableName: 'users',
   underscored: true,
   instanceMethods: {
     authenticate: function(value) {

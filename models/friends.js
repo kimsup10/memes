@@ -1,8 +1,7 @@
 var Sequelize = require('sequelize');
-var bcrypt = require('bcrypt');
 var db = require('../utils/database.js');
 
-var Friend = db.define('friends', {
+var Friend = db.define('friend', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -10,7 +9,7 @@ var Friend = db.define('friends', {
     },
     user_id: Sequelize.INTEGER,
     friend_id: Sequelize.INTEGER,
-    accepted_at: Sequelize.TIME
+    status: Sequelize.ENUM('waiting', 'request', 'decliend', 'accepted')
 }, {
     underscored: true
 });
