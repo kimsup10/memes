@@ -10,7 +10,6 @@ var Attachment = db.define('attachment', {
   filepath: Sequelize.STRING,
   filesize: Sequelize.INTEGER,
 }, {
-  tableName: 'attachments',
   underscored: true,
   instanceMethods: {
   }

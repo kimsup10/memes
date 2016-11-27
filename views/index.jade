@@ -2,7 +2,11 @@ extends layout
 
 block content
   h1 짤방
-  ul
-    each attachment in attachments
-      div
-        img(src=attachment.filepath style="width: 512px; height: 256px;")
+  ul.list-unstyled
+    each meme in memes
+      li
+        div.panel.panel-default
+          div.panel-heading #{meme.user.username} @ #{meme.created_at}
+          div.panel-body
+              img(src=meme.attachment.filepath style="min-width: 512px; max-width: 512px;")
+          div.panel-footer= meme.description

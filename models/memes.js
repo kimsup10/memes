@@ -1,4 +1,3 @@
-
 var Sequelize = require('sequelize');
 var db = require('../utils/database.js');
 
@@ -16,7 +15,6 @@ var Meme = db.define('meme', {
         defaultValue: 'public'
     }
 }, {
-    tableName: 'memes',
     underscored: true,
     instanceMethods: {
     }

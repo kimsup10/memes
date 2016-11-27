@@ -1,16 +1,17 @@
 var express = require('express');
 var imgUpload = require('./imgUpload');
 var users = require('./users');
-var Attachment = require('../models/attachments.js');
+var m = require('../models/models.js');
 
 module.exports = function (app) {
     app.use('/user', users);
     app.use('/upload', imgUpload);
 
-
     app.get('/', function(req, res, next) {
-        Attachment.findAll({limit: 10}).then(function(attachments) {
-            res.render('index', { attachments: attachments });
+        m.Meme.findAll({limit: 10, include: [
+          m.Meme.associations.attachment, m.Meme.associations.user
+        ]}).then(function(memes) {
+            res.render('index', { memes: memes });
         });
     });
 };

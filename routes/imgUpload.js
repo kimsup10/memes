@@ -1,6 +1,5 @@
 var express = require('express');
-var Attachment = require('../models/attachments.js');
-var Meme = require('../models/memes.js');
+var m = require('../models/models.js');
 var upload = require('../utils/multer');
 
 var router = express.Router();
@@ -20,7 +19,7 @@ router.post('/', upload.array('image'), function (req, res) {
             filepath: f.path
         };
     });
-    Attachment.bulkCreate(attachments, {returning: true}).then(function (a) {
+    m.Attachment.bulkCreate(attachments, {returning: true}).then(function (a) {
             var memes = [];
             for (var i in a) {
                 memes.push(
@@ -32,7 +31,7 @@ router.post('/', upload.array('image'), function (req, res) {
                     }
                 );
             }
-            Meme.bulkCreate(memes).then(function () {
+            m.Meme.bulkCreate(memes).then(function () {
                 res.redirect('/');
             });
         }
