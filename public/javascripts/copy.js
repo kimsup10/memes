@@ -16,6 +16,7 @@ function SelectText(element) {
         console.log(selection);
     }
 }
+
 function copy(id) {
      //Make the container Div contenteditable
     $($('.meme#'+id)).attr("contenteditable", true);
@@ -31,4 +32,12 @@ function copy(id) {
     $($(this)).removeAttr("contenteditable");
     //Success!!
     alert("image copied!");
+    copyCount(id);
+}
+
+function copyCount(id) {
+    $.post("/count",
+        {
+            attachmentId: id
+        });
 }
