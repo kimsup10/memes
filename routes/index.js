@@ -13,7 +13,7 @@ module.exports = function (app) {
         m.Meme.findAll({limit: 10, include: [
           m.Meme.associations.attachment, m.Meme.associations.user
         ]}).then(function(memes) {
-            res.render('index', { memes: memes });
+            res.render('index', { memes: memes, hostname:req.headers.host });
         });
     });
 };

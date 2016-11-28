@@ -19,10 +19,9 @@ function SelectText(element) {
 
 function copy(id) {
      //Make the container Div contenteditable
-    $($('.meme#'+id)).attr("contenteditable", true);
-    console.log($($('.meme#'+id)));
+    $($('#meme-'+id)).attr("contenteditable", true);
     //Select the image
-    SelectText($($('.meme#'+id)).get(0));
+    SelectText($($('#meme-'+id)).get(0));
     //Execute copy Command
     //Note: This will ONLY work directly inside a click listenner
     document.execCommand('copy');
@@ -31,7 +30,7 @@ function copy(id) {
     //Make the container Div uneditable again
     $($(this)).removeAttr("contenteditable");
     //Success!!
-    alert("image copied!");
+    alert("이미지를 복사했습니다! 메신저 창에 붙여넣기 해보세요 :)");
     copyCount(id);
 }
 

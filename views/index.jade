@@ -8,6 +8,6 @@ block content
       li
         div.panel.panel-default
           div.panel-heading #{meme.user.username} @ #{meme.created_at}
-          div.panel-body(id="meme-#{attachment.id}")
-              img(src=meme.attachment.filepath style="min-width: 512px; max-width: 512px;" onclick='copy('+attachment.id+')')
+          div.panel-body(id="meme-#{meme.id}")
+              img(src=meme.attachment.filepath alt=hostname+'/'+meme.attachment.filepath style="min-width: 512px; max-width: 512px;" onclick='copy('+meme.id+')')
           div.panel-footer= meme.description

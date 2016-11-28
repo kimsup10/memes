@@ -33,8 +33,6 @@ $(document).ready(function(){
         });
         reader.readAsDataURL(file);
     }
-
-
 });
 
 function removeAttachment(id) {
