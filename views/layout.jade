@@ -13,9 +13,9 @@ html
         a.navbar-brand(href="/") 짤방
       div.navbar-collapse.collapse
         ul.nav.navbar-nav
-          li.active
+          li
             a(href='/trending') Trending
-          li.active
+          li
             if session.user_id
               a(href='/upload') Upload
         form.navbar-form.navbar-left

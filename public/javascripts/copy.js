@@ -16,7 +16,7 @@ function SelectText(element) {
 
 function copy(id) {
      //Make the container Div contenteditable
-    var img = $($('#attachment-'+id));
+    var img = $($('#meme-'+id));
     img.attr("contenteditable", true);
     //Select the image
     SelectText(img.get(0));
@@ -28,12 +28,5 @@ function copy(id) {
     //Make the container Div uneditable again
     $($(img)).removeAttr("contenteditable");
     //Success!!
-    copyCount(id);
-}
-
-function copyCount(id) {
-    $.post("/count",
-        {
-            attachmentId: id
-        });
+    $.post("/count", { memeId: id });
 }

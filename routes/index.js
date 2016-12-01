@@ -22,7 +22,7 @@ module.exports = function (app) {
                 friends_ids = friends.map(function(friend) { return friend.friend_id });
                 friends_ids.push(req.session.user_id);
                 m.Meme.findAll({
-                    limit: 10,
+                    limit: 20,
                     include: [m.Meme.associations.attachment, m.Meme.associations.user],
                     where: {
                         $or: [
