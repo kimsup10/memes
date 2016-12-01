@@ -20,7 +20,6 @@ router.get('/', function (req, res, next) {
             var attachmentIds = attachmentNames.map(function (a) {
                 return a.split('#')[1];
             });
-            console.log(attachmentIds);
             getRankedAttachments(0, attachmentIds, [], function (attachments) {
                 res.render('trend', { attachments: attachments, hostname:req.headers.host });
             });

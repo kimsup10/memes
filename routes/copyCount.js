@@ -1,28 +1,38 @@
 var express = require('express');
 var Attachment = require('../models/attachments.js');
 var Meme = require('../models/memes.js');
+var m = require('../models/models');
 var redisClient = require('../utils/redis');
 
 var router = express.Router();
 
 router.post('/', function (req, res) {
     var key = 'attach#'+req.body.attachmentId;
-    redisClient.hincrby(key, 'copy_count', 1, function (err, reply) {
-        if (err) res.send(500);
-        else{
-            redisClient.hgetall(key, function (err, obj) {
-                if (err) res.send(500);
-                else{
-                    trendingRank(key, obj);
-                }
-            });
-            console.log(reply.toString());
-            res.send(200);
+    m.Meme.findOne({
+        where:{
+            privacy_level:'public',
+            attachment_id:req.body.attachmentId
         }
+    }).then(function (m) {
+        if (!m) {
+            res.send(200);
+            return;
+        }
+        redisClient.hincrby(key, 'copy_count', 1, function (err, reply) {
+            if (err) res.send(500);
+            else{
+                redisClient.hgetall(key, function (err, obj) {
+                    if (err) res.send(500);
+                    else{
+                        trendingRank(key, obj);
+                    }
+                });
+                console.log(reply.toString());
+                res.send(200);
+            }
+        });
     });
 });
-
-
 
 function trendingRank(member, hash) {
     // Set seconds_score
