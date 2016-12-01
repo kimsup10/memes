@@ -4,7 +4,11 @@ block content
   form.form(method="POST")
     div.form-group
       label(for="username") ID
-      input.form-control(name="username", required)
+      if user
+        input.form-control(name="username", value=user.username, disabled)
+      else
+        input.form-control(name="username", required)
+
     div.form-group
       label(for="password") Password
       input.form-control(name="password", type="password", required)
@@ -13,7 +17,13 @@ block content
       input.form-control(name="password-confirm", type="password", required)
     div.form-group
       label(for="email") Email
-      input.form-control(name="email", type="email", required)
+      if user
+        input.form-control(name="email", type="email", value=user.email,  required)
+      else
+        input.form-control(name="email", type="email",  required)
     div.form-group
-        button.btn.btn-primary Sign up
-          span.glyphicon.glyphicon-userr
+      if user
+        button.btn.btn-primary 변경
+      else
+        button.btn.btn-primary 가입
+          span.glyphicon.glyphicon-user
