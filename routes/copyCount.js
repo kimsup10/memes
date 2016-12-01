@@ -1,8 +1,7 @@
 var express = require('express');
 var Attachment = require('../models/attachments.js');
 var Meme = require('../models/memes.js');
-var redis = require('redis');
-var redisClient = redis.createClient();
+var redisClient = require('../utils/redis');
 
 var router = express.Router();
 
@@ -22,6 +21,8 @@ router.post('/', function (req, res) {
         }
     });
 });
+
+
 
 function trendingRank(member, hash) {
     // Set seconds_score

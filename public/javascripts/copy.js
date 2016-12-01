@@ -19,7 +19,7 @@ function SelectText(element) {
 
 function copy(id) {
      //Make the container Div contenteditable
-    $($('#meme-'+id)).attr("contenteditable", true);
+    $($('#meme-'+id+ ', #attachment-'+id)).attr("contenteditable", true);
     //Select the image
     SelectText($($('#meme-'+id)).get(0));
     //Execute copy Command
