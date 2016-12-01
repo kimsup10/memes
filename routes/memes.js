@@ -78,7 +78,7 @@ router.post('/', upload.array('image'), function (req, res) {
                         }
                     );
                 }
-                m.Meme.bulkCreate(memes).then(function () {
+                m.Meme.bulkCreate(memes, {returning: true}).then(function () {
                     res.redirect('/');
                 });
             }
