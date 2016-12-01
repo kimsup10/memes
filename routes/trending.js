@@ -25,7 +25,7 @@ router.get('/', function (req, res, next) {
                         }
                     }).then(function (a) {
                     attachments.push(a);
-                    if (attachments.length==trendNum){
+                    if (attachments.length==attachmentIds.length){
                         eventEmitter.emit('trending', res, attachments, req.headers.host);
                     }
                 });
