@@ -30,13 +30,12 @@ function trendingRank(member, hash) {
         var seconds_score = hash.seconds_score;
     } else{
         var seconds_score = Math.round(new Date().getTime()/(1000*45000));
-        redisClient.hset(key, 'seconds_score', seconds_score)
+        redisClient.hset(member, 'seconds_score', seconds_score)
     }
     var count_score = Math.log10(hash.copy_count);
 
     var score = Number(count_score) + Number(seconds_score);
 
-    console.log(count_score, seconds_score, score);
     redisClient.zadd('trending', score, member);
 }
 

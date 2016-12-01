@@ -21,7 +21,7 @@ function copy(id) {
      //Make the container Div contenteditable
     $($('#meme-'+id+ ', #attachment-'+id)).attr("contenteditable", true);
     //Select the image
-    SelectText($($('#meme-'+id)).get(0));
+    SelectText($($('#meme-'+id+ ', #attachment-'+id)).get(0));
     //Execute copy Command
     //Note: This will ONLY work directly inside a click listenner
     document.execCommand('copy');

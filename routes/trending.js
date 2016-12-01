@@ -12,30 +12,36 @@ var router = express.Router();
 const trendNum = 5;
 
 router.get('/', function (req, res, next) {
-    redisClient.zrevrange('trending', 0, trendNum-1, function (err, attachmentIds) {
+    redisClient.zrevrange('trending', 0, trendNum-1, function (err, attachmentNames) {
         if (err) res.send(500);
         else {
 
             var attachments = [];
-            attachmentIds.map(function (a) {
-                a_id = a.split('#')[1];
-                m.Attachment.findOne({
-                        where: {
-                            id:a_id
-                        }
-                    }).then(function (a) {
-                    attachments.push(a);
-                    if (attachments.length==attachmentIds.length){
-                        eventEmitter.emit('trending', res, attachments, req.headers.host);
-                    }
-                });
+            var attachmentIds = attachmentNames.map(function (a) {
+                return a.split('#')[1];
+            });
+            console.log(attachmentIds);
+            getRankedAttachments(0, attachmentIds, [], function (attachments) {
+                res.render('trend', { attachments: attachments, hostname:req.headers.host });
             });
         }
     });
 });
 
-eventEmitter.on('trending', function (res, attachments, hostname) {
-    res.render('trend', {attachments:attachments, hostname:hostname});
-});
+function getRankedAttachments(index, attachmentIds, attachments, cb) {
+    if (index == attachmentIds.length){
+        cb(attachments);
+        return;
+    }
+    m.Attachment.findOne({
+        where: {
+            id:attachmentIds[index++]
+        }
+    }).then(function (a) {
+        attachments.push(a);
+        getRankedAttachments(index, attachmentIds, attachments, cb);
+
+    });
+}
 
 module.exports = router;
