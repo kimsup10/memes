@@ -21,7 +21,7 @@ router.post('/login', function(req, res, next){
 
 router.post('/logout', function(req, res, next){
     req.session.destroy();
-    res.redirect('back');
+    res.redirect('/');
 });
 
 router.get('/signup', function(req, res, next) {
@@ -79,6 +79,24 @@ router.post('/friends', function(req, res, next) {
 });
 
 router.get('/profile', function(req,res,next){
-    res.render('signup');
+    m.User.findOne({
+        where: {id: req.session.user_id}
+    }).then(function(user){
+        res.render('signup',{user : user});
+    });
+});
+
+router.post('/profile', function(req,res,next){
+    m.User.findOne({
+        where: {id: req.session.user_id}
+    }).then(function(user) {
+        user.password = req.body.password;
+        user.email = req.body.email;
+        user.save().then(function(update){
+            res.redirect('/');
+        });
+    }).catch(function(error) {
+        res.redirect('back');
+    });
 });
 module.exports = router;
