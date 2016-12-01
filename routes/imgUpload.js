@@ -25,7 +25,7 @@ router.post('/', upload.array('image'), function (req, res) {
                 attachment_id: a.id,
                 description: req.body.description,
                 privacy_level:req.body.privacy_level
-            }
+            };
             m.Meme.create(meme).then(function () {
                 res.redirect('/');
             })

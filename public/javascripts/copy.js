@@ -8,12 +8,9 @@ function SelectText(element) {
     } else if (window.getSelection) {
         var selection = window.getSelection();
         var range = document.createRange();
-        console.log(element);
         range.selectNodeContents(element);
-        console.log(range);
         selection.removeAllRanges();
         selection.addRange(range);
-        console.log(selection);
     }
 }
 
@@ -29,9 +26,8 @@ function copy(id) {
     //Unselect the content
     window.getSelection().removeAllRanges();
     //Make the container Div uneditable again
-    $($(this)).removeAttr("contenteditable");
+    $($(img)).removeAttr("contenteditable");
     //Success!!
-    alert("이미지를 복사했습니다! 메신저 창에 붙여넣기 해보세요 :)");
     copyCount(id);
 }
 

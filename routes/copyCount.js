@@ -27,25 +27,23 @@ router.post('/', function (req, res) {
                         trendingRank(key, obj);
                     }
                 });
-                console.log(reply.toString());
                 res.send(200);
             }
         });
     });
 });
 
-function trendingRank(member, hash) {
+function trendingRank(key, hash) {
     // Set seconds_score
     if (hash.seconds_score){
         var seconds_score = hash.seconds_score;
     } else{
         var seconds_score = Math.round(new Date().getTime()/(1000*45000));
-        redisClient.hset(member, 'seconds_score', seconds_score)
+        redisClient.hset(key, 'seconds_score', seconds_score)
     }
     var count_score = Math.log10(hash.copy_count);
-
     var score = Number(count_score) + Number(seconds_score);
-
+    var member = key.split('#')[1];
     redisClient.zadd('trending', score, member);
 }
 

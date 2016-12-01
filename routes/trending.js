@@ -12,34 +12,35 @@ var router = express.Router();
 const trendNum = 5;
 
 router.get('/', function (req, res, next) {
-    redisClient.zrevrange('trending', 0, trendNum-1, function (err, attachmentNames) {
+    redisClient.zrevrange('trending', 0, trendNum-1, function (err, attachmentIds) {
         if (err) res.send(500);
         else {
 
-            var attachments = [];
-            var attachmentIds = attachmentNames.map(function (a) {
-                return a.split('#')[1];
-            });
-            getRankedAttachments(0, attachmentIds, [], function (attachments) {
+
+            getRankedAttachments(attachmentIds, function (attachments) {
                 res.render('trend', { attachments: attachments, hostname:req.headers.host });
             });
         }
     });
 });
 
-function getRankedAttachments(index, attachmentIds, attachments, cb) {
-    if (index == attachmentIds.length){
-        cb(attachments);
-        return;
-    }
-    m.Attachment.findOne({
+function getRankedAttachments(attachmentIds, cb) {
+    m.Attachment.findAll({
         where: {
-            id:attachmentIds[index++]
+            id:{ $in : attachmentIds }
         }
-    }).then(function (a) {
-        attachments.push(a);
-        getRankedAttachments(index, attachmentIds, attachments, cb);
-
+    }).then(function (attachments) {
+        var sortedAttachments = [];
+        for ( var i in attachmentIds ){
+            var target = attachmentIds[i];
+            for ( var j in attachments ){
+                if (target == attachments[j].id){
+                    sortedAttachments[i]=attachments[j];
+                    attachments.splice(j, 1);
+                }
+            }
+        }
+        cb(sortedAttachments);
     });
 }
 
