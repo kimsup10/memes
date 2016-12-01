@@ -1,12 +1,14 @@
 extends layout
 
 block content
+  script(type='text/javascript' src='/javascripts/copy.js')
   h1 짤방
   ul.list-unstyled
     each meme in memes
       li
         div.panel.panel-default
           div.panel-heading #{meme.user.username} @ #{meme.created_at}
-          div.panel-body
-              img(src=meme.attachment.filepath style="min-width: 512px; max-width: 512px;")
+          div.panel-body(id="meme-#{meme.id}")
+            img(src=meme.attachment.filepath style="min-width: 512px; max-width: 512px;" onclick='copy('+meme.id+')')
           div.panel-footer= meme.description
+

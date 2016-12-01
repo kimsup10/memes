@@ -7,7 +7,12 @@ var Attachment = db.define('attachment', {
     primaryKey: true,
     autoIncrement: true
   },
-  filepath: Sequelize.STRING,
+  filepath: {
+    type: Sequelize.STRING,
+    get: function(){
+      return 'uploads/'+this.getDataValue('filepath');
+    }
+  },
   filesize: Sequelize.INTEGER,
 }, {
   underscored: true,

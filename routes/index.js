@@ -1,11 +1,15 @@
 var express = require('express');
 var imgUpload = require('./imgUpload');
+var copyCount = require('./copyCount');
 var users = require('./users');
+var trending = require('./trending');
 var m = require('../models/models.js');
 
 module.exports = function (app) {
     app.use('/user', users);
     app.use('/upload', imgUpload);
+    app.use('/count', copyCount);
+    app.use('/trending', trending);
 
     app.get('/', function(req, res, next) {
         if(req.session.user_id) {
@@ -18,7 +22,7 @@ module.exports = function (app) {
                 friends_ids = friends.map(function(friend) { return friend.friend_id });
                 friends_ids.push(req.session.user_id);
                 m.Meme.findAll({
-                    limit: 10,
+                    limit: 20,
                     include: [m.Meme.associations.attachment, m.Meme.associations.user],
                     where: {
                         $or: [
