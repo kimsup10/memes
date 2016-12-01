@@ -12,7 +12,7 @@ module.exports = function (app) {
     app.use('/trending', trending);
 
     app.get('/', function(req, res, next) {
-       if(req.session.user_id) {
+        if(req.session.user_id) {
             m.Friend.findAll({
                 attributes: ['friend_id'],
                 where: {
@@ -47,6 +47,5 @@ module.exports = function (app) {
                 res.render('index', {memes: memes});
             });
         }
->>>>>>> 8d47fe119be0ea4ec2d4c323bc7ba70ef44eb275
     });
 };
