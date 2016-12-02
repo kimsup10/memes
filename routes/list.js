@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var m = require('../models/models.js');
 var redis = require('../utils/redis');
+var es = require('../utils/elasticsearch.js');
 
 const pageLimit = 20;
 
@@ -58,6 +59,38 @@ router.get('/trending', function (req, res, next) {
                     return memes.splice(i, 1).pop();
                 });
                 res.render('index', { memes: sortedMemes });
+            });
+        }
+    });
+});
+
+router.get('/search', function(req, res, next) {
+    es.search({
+        index: 'meme',
+        type: 'meme',
+        body: {
+            query: {
+              match: {description: req.query.q}
+            }, filter: {
+              term: {privacy_level: 'public'}
+            }
+        }
+    }, function(err, resp) {
+        if (err) {
+            res.send(500);
+        } else {
+            memes_id = resp.hits.hits.map(function(meme) {
+                return meme._id;
+            });
+            m.Meme.findAll({
+                limit: 10,
+                include: [m.Meme.associations.attachment, m.Meme.associations.user],
+                where: {
+                    id: {$in: memes_id},
+                    privacy_level: 'public'
+                }
+            }).then(function (memes) {
+                res.render('index', {memes: memes});
             });
         }
     });

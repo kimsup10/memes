@@ -18,9 +18,9 @@ html
           li
             if session.user_id
               a(href='/memes/new') Upload
-        form.navbar-form.navbar-left
+        form.navbar-form.navbar-left(action="/search")
           div.form-group
-            input.form-control(placeholder="Search")
+            input.form-control(name="q", placeholder="Search")
           button.btn.btn-default Submit
         ul.nav.navbar-nav.navbar-right
           if session.user_id
