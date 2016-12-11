@@ -14,6 +14,8 @@ html
       div.navbar-collapse.collapse
         ul.nav.navbar-nav
           li
+            a(href='/user/'+session.user_id) My memes
+          li
             a(href='/trending') Trending
           li
             if session.user_id

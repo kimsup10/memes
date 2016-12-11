@@ -25,7 +25,12 @@ router.post('/logout', function(req, res, next){
 });
 
 router.get('/signup', function(req, res, next) {
-    res.render('signup');
+    console.log('sign up');
+    if (req.session.user_id){
+        res.redirect('/');
+    } else {
+        res.render('signup');
+    }
 });
 
 router.post('/signup', function(req, res, next) {
@@ -99,4 +104,28 @@ router.post('/profile', function(req,res,next){
         res.redirect('back');
     });
 });
+
+router.get('/:id', function (req, res, next) {
+    var host_id= req.params.id;
+    var cli_id = req.session.user_id;
+
+    if (host_id==cli_id){
+        m.Meme.getListOfUser(host_id, 'private', function (memes) {
+            res.render('index', {title: memes[0].user.username+'의', memes: memes});
+        });
+    }
+
+    m.Friend.findOne({where:{user_id:cli_id, friend_id:host_id, status:"accepted"}}).then(function (f) {
+        // Show only memes in privacy level
+        if (f){
+            var privacy_level= 'friends'
+        } else{
+            var privacy_level = 'public'
+        }
+        m.Meme.getListOfUser(host_id, privacy_level, function (memes) {
+            res.render('index', {title: memes[0].user.username+'의', memes: memes});
+        });
+    });
+});
+
 module.exports = router;
