@@ -17,7 +17,7 @@ html
             a(href='/trending') Trending
           li
             if session.user_id
-              a(href='/upload') Upload
+              a(href='/memes/new') Upload
         form.navbar-form.navbar-left
           div.form-group
             input.form-control(placeholder="Search")
@@ -56,5 +56,7 @@ html
                             span.glyphicon.glyphicon-log-in
                     div.bottom.text-center="New here? "
                       a(href="/user/signup/") Sign Up
+    if messages.error
+      div.alert.alert-danger= messages.error
     div.container-fluid
       block content
