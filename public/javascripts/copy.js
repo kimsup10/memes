@@ -13,7 +13,6 @@ function SelectText(element) {
         selection.addRange(range);
     }
 }
-
 function copy(id) {
      //Make the container Div contenteditable
     var img = $($('#meme-'+id));
@@ -28,5 +27,5 @@ function copy(id) {
     //Make the container Div uneditable again
     $($(img)).removeAttr("contenteditable");
     //Success!!
-    $.post("/count", { memeId: id });
+    $.post("/memes/"+id+"/copy");
 }

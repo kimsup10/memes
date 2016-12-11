@@ -1,14 +1,49 @@
 var express = require('express');
-var m = require('../models/models.js');
+var m = require('../models/models');
 var upload = require('../utils/multer');
+var redis = require('../utils/redis');
+
 var router = express.Router();
 
-router.get('/', function (req, res) {
-    if (req.session.user_id){
-        res.render('imgUpload');
-    } else
-        res.redirect('/');
+router.post('/:id/copy', function (req, res) {
+    var key = 'meme:'+req.params.id;
+    m.Meme.findOne({
+        where: {
+            id: parseInt(req.params.id),
+            privacy_level:'public'
+        }
+    }).then(function (meme) {
+        if (!meme) {
+            res.send(200);
+        } else {
+            redis.hincrby(key, 'copy_count', 1, function (err, reply) {
+                if (err) {
+                    res.send(500);
+                } else {
+                    redis.hgetall(key, function (err, hash) {
+                        if (err) {
+                            res.send(500);
+                        } else {
+                            var score = Math.log10(Number(hash.copy_count)) + Math.round(meme.created_at/(1000*45000));
+                            redis.zadd('trending', score, meme.id);
+                        }
+                    });
+                    res.send(200);
+                }
+            });
+        }
+    });
+});
 
+
+router.get('/new', function (req, res) {
+    if (req.session.user_id){
+        res.render('newMeme');
+    } else {
+        // No authorization
+        req.flash('error', '로그인 하세요.');
+        res.redirect('/')
+    }
 });
 
 router.post('/', upload.array('image'), function (req, res) {
@@ -47,9 +82,9 @@ router.post('/', upload.array('image'), function (req, res) {
                     res.redirect('/');
                 });
             }
-        )};
+        )}
 });
 
 
-
 module.exports = router;
+

@@ -6,6 +6,7 @@ var RedisStore = require('connect-redis')(session);
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var flash = require('express-flash');
 
 var redis_client = require('./utils/redis.js');
 var users = require('./routes/users');
@@ -32,6 +33,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(flash());
 
 app.use('/users', users);
 require('./routes/index')(app);
