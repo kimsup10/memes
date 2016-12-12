@@ -35,6 +35,41 @@ router.post('/:id/copy', function (req, res) {
     });
 });
 
+router.get('/:id/edit', function (req, res) {
+    m.Meme.findOne({
+        where:{id:req.params.id},
+        include:[m.Meme.associations.user, m.Meme.associations.attachment]
+    }).then(function (m) {
+        if (m.user_id == req.session.user_id){
+            res.render('editMeme', {meme:m});
+        } else {
+            req.flash('error', '권한이 없습니다.');
+            res.redirect('/');
+        }
+    });
+});
+
+router.post('/:id/edit', function (req, res) {
+    m.Meme.update({
+        description: req.body.description,
+        privacy_level:req.body.privacy_level
+    }, {where:{id:req.params.id}, returning:true}).then(function (m) {
+        res.redirect('/memes/'+req.params.id);
+    });
+});
+
+router.get('/:id/delete', function (req, res) {
+    m.Meme.findOne({where:{id:req.params.id}}).then(function (m) {
+        if (req.session.user_id == m.user_id){
+            m.destroy({where:{id:req.params.id}}).then(function (r) {
+                res.redirect('back');
+            });
+        }else {
+            req.flash('error', '권한이 없습니다.');
+            res.redirecte('back');
+        }
+    });
+});
 
 router.get('/new', function (req, res) {
     if (req.session.user_id){

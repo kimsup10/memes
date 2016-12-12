@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var gravatar = require('gravatar');
 var m = require('../models/models.js');
+
 
 // TODO: user page
 router.get('/', function(req, res, next) {
