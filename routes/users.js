@@ -53,7 +53,7 @@ router.post('/signup', function(req, res, next) {
 
 router.get('/friends', function(req, res, next) {
     m.Friend.findAll({
-        where: {user_id: req.session.user_id},
+        where: {user_id: req.session.user_id, status: {$ne: 'declined'}},
         include: [m.Friend.associations.friend_user]
     }).then(function(friends){
         res.render('friend', {friends: friends});
