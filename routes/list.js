@@ -20,6 +20,7 @@ router.get('/', function(req, res, next) {
                         {privacy_level: 'friends', user_id: {$in: friends_ids}}
                     ]
                 },
+                order: 'id DESC',
                 limit: pageLimit,
                 offset: ((page - 1) * pageLimit)
             }).then(function(result) {

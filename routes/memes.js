@@ -5,6 +5,17 @@ var redis = require('../utils/redis');
 
 var router = express.Router();
 
+
+router.get('/new', function (req, res) {
+    if (req.session.user_id){
+        res.render('newMeme');
+    } else {
+        // No authorization
+        req.flash('error', '로그인 하세요.');
+        res.redirect('/')
+    }
+});
+
 router.get("/:id",function(req,res,next) {
     m.Meme.find({
         include: [m.Meme.associations.attachment, m.Meme.associations.user],
@@ -78,16 +89,6 @@ router.get('/:id/delete', function (req, res) {
             res.redirecte('back');
         }
     });
-});
-
-router.get('/new', function (req, res) {
-    if (req.session.user_id){
-        res.render('newMeme');
-    } else {
-        // No authorization
-        req.flash('error', '로그인 하세요.');
-        res.redirect('/')
-    }
 });
 
 router.post('/', upload.array('image'), function (req, res) {
