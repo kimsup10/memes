@@ -14,10 +14,11 @@ router.post('/login', function(req, res, next){
         if(user && user.authenticate(req.body["password"])) {
             req.session.user_id = user.id;
             req.session.username = user.username;
+            res.redirect('back');
         } else {
             req.flash('error', 'Failed to login');
+            res.redirect(400, 'back');
         }
-        res.redirect('back');
     });
 });
 
@@ -41,7 +42,7 @@ router.post('/signup', function(req, res, next) {
         res.redirect('/');
     }).catch(function(error) {
         req.flash('error', error.message);
-        res.redirect('back');
+        res.redirect(400, 'back');
     });
 });
 
@@ -65,11 +66,11 @@ router.post('/friends', function(req, res, next) {
           res.redirect('back');
       }).catch(function(error) {
           req.flash('error', error.message);
-          res.redirect('back');
+          res.redirect(400, 'back');
       });
     }).catch(function(error) {
         req.flash('error', error.message);
-        res.redirect('back');
+        res.redirect(400, 'back');
     });
   } else {
     m.Friend.update({status: req.body['action']}, {
@@ -102,7 +103,7 @@ router.post('/profile', function(req,res,next){
         });
     }).catch(function(error) {
         req.flash('error', error.message);
-        res.redirect('back');
+        res.redirect(400, 'back');
     });
 });
 module.exports = router;
