@@ -11,7 +11,19 @@ var Friend = db.define('friend', {
     friend_id: Sequelize.INTEGER,
     status: Sequelize.ENUM('waiting', 'request', 'decliend', 'accepted')
 }, {
-    underscored: true
+    underscored: true,
+    classMethods: {
+        findValidFriendIdsByUserId: function(user_id, callback) {
+            Friend.findAll({
+                attributes: ['friend_id'],
+                where: {
+                    user_id: user_id, status: "accepted"
+                }
+            }).then(function(friends) {
+                callback(friends.map(function(friend) { return friend.friend_id }));
+            });
+        }
+    }
 });
 
 module.exports = Friend;

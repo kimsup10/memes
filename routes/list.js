@@ -2,18 +2,13 @@ var express = require('express');
 var router = express.Router();
 var m = require('../models/models.js');
 var redis = require('../utils/redis');
+var es = require('../utils/elasticsearch.js');
 
 const pageLimit = 20;
 
 router.get('/', function(req, res, next) {
     if(req.session.user_id) {
-        m.Friend.findAll({
-            attributes: ['friend_id'],
-            where: {
-                user_id: req.session.user_id, status: "accepted"
-            }
-        }).then(function (friends) {
-            friends_ids = friends.map(function(friend) { return friend.friend_id });
+        m.Friend.findValidFriendIdsByUserId(req.session.user_id, function(friends_ids){
             friends_ids.push(req.session.user_id);
             m.Meme.findAll({
                 limit: pageLimit,
@@ -63,4 +58,56 @@ router.get('/trending', function (req, res, next) {
     });
 });
 
-module.exports = router;
+
+router.get('/search', function(req, res, next) {
+    var query = {
+      query: { match: { description: req.query.q }},
+      filter: {
+        or: [
+          { term: { privacy_level: 'public'}},
+        ]
+      }
+    };
+    function executeQueryAndRender() {
+        es.search({
+            index: 'meme',
+            type: 'meme',
+            body: query
+        }, function(err, resp) {
+            if (err) {
+                res.send(500);
+            } else {
+                memes_id = resp.hits.hits.map(function(meme) {
+                    return Number(meme._id);
+                });
+                m.Meme.findAll({
+                    limit: 10,
+                    include: [m.Meme.associations.attachment, m.Meme.associations.user],
+                    where: {
+                        id: {$in: memes_id},
+                    }
+                }).then(function (memes) {
+                    res.render('index', {memes: memes});
+                });
+            }
+        });
+    };
+    if (req.session.user_id) {
+        m.Friend.findValidFriendIdsByUserId(req.session.user_id, function(friends_ids) {
+            friends_ids.push(req.session.user_id);
+            query.filter.or.push({and: [
+              {term: {privacy_level: 'friends'}},
+              {terms: {user_id: friends_ids }}
+            ]});
+            query.filter.or.push({and: [
+              {term: {privacy_level: 'private'}},
+              {term: {user_id: req.session.user_id }}
+            ]});
+            executeQueryAndRender();
+        });
+    } else {
+        executeQueryAndRender();
+    }
+});
+
+module.exports = router

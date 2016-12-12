@@ -1,6 +1,7 @@
 var Sequelize = require('sequelize');
 var bcrypt = require('bcrypt');
 var db = require('../utils/database.js');
+var es = require('../utils/elasticsearch.js');
 
 var User = db.define('user', {
   id: {
@@ -31,6 +32,28 @@ var User = db.define('user', {
         return false;
     }
   }
+});
+
+User.addHook('afterCreate', 'saveES', function(user, options) {
+  es.create({
+    index: 'meme',
+    type: 'user',
+    id: user.id,
+    body: {
+      username: user.username,
+      email: user.email
+    }
+  }, function(error, response) {
+  });
+});
+
+User.addHook('afterDestroy', 'saveES', function(user, options) {
+  es.delete({
+    index: 'meme',
+    type: 'user',
+    id: user.id
+  }, function(error, response) {
+  });
 });
 
 module.exports = User;
