@@ -7,6 +7,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var flash = require('express-flash');
+var URI = require('URIjs');
 
 var redis_client = require('./utils/redis.js');
 var users = require('./routes/users');
@@ -19,6 +20,9 @@ app.use(session({
 }));
 app.use(function(req,res,next){
   res.locals.session = req.session;
+  res.locals.urlHelper = function (key, value) {
+      return (new URI(req.url)).setQuery(key, value);
+  };
   next();
 });
 
