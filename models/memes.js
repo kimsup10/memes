@@ -16,9 +16,7 @@ var Meme = db.define('meme', {
         defaultValue: 'public'
     }
 }, {
-    underscored: true,
-    instanceMethods: {
-    }
+    underscored: true
 });
 
 Meme.addHook('afterCreate', 'saveES', function(meme, options) {

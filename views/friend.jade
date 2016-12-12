@@ -2,23 +2,29 @@ extends layout
 
 block content
     h1 친구목록
-    ul
-      each friend in friends
-        if friend.status == 'accepted'
-          li= friend.friend_user.username
-
-    h1 친구신청
-    ul
-      each friend in friends
-        if friend.status == 'waiting'
-          li= friend.friend_user.username
-            button.btn.btn-danger 신청취소
-        if friend.status == 'request'
-          li= friend.friend_user.username
-            form(method="POST")
-              input(type="hidden", name="user_id", value=friend.friend_id)
-              button.btn.btn-primary(name="action", value="accepted") 수락
-              button.btn.btn-danger(name="action", value="declined") 거절
+    table.table
+      thead
+        tr
+          th(style="width: 10%") 프사
+          th(style="width: 50%") 아이디
+          th(style="width: 40%") 상태
+      tbody
+        each friend in friends
+          tr
+            td
+              img.img-rounded.avatar(src=friend.friend_user.getProfileUrl() style="width: 64px; width: 64px;")
+            td= friend.friend_user.username
+            td
+              if friend.status == 'waiting'
+                button.btn.btn-danger 신청취소
+              if friend.status == 'request'
+                form(method="POST")
+                  input(type="hidden", name="user_id", value=friend.friend_id)
+                  button.btn.btn-primary(name="action", value="accepted") 수락
+                  button.btn.btn-danger(name="action", value="declined") 거절
+        else
+          tr
+            td(colspan=3) 친구가 없습니다.
     h1 친구추가
     form.form(method="POST")
         div.form-group

@@ -10,7 +10,7 @@ var Attachment = db.define('attachment', {
   filepath: {
     type: Sequelize.STRING,
     get: function(){
-      return 'uploads/'+this.getDataValue('filepath');
+      return '/uploads/'+this.getDataValue('filepath');
     }
   },
   filesize: Sequelize.INTEGER,

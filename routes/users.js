@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var m = require('../models/models.js')
+var m = require('../models/models.js');
+
 
 // TODO: user page
 router.get('/', function(req, res, next) {
@@ -28,7 +29,11 @@ router.post('/logout', function(req, res, next){
 });
 
 router.get('/signup', function(req, res, next) {
-    res.render('signup');
+    if (req.session.user_id){
+        res.redirect('/');
+    } else {
+        res.render('signup');
+    }
 });
 
 router.post('/signup', function(req, res, next) {
@@ -49,7 +54,7 @@ router.post('/signup', function(req, res, next) {
 
 router.get('/friends', function(req, res, next) {
     m.Friend.findAll({
-        where: {user_id: req.session.user_id},
+        where: {user_id: req.session.user_id, status: {$ne: 'declined'}},
         include: [m.Friend.associations.friend_user]
     }).then(function(friends){
         res.render('friend', {friends: friends});
@@ -106,4 +111,42 @@ router.post('/profile', function(req,res,next){
         res.redirect(400, 'back');
     });
 });
+
+router.get('/:username', function (req, res, next) {
+    m.User.findOne({
+        where: {username: req.params.username}
+    }).then(function (user) {
+        function render(memes) {
+            memes = memes.map(function (m) {
+                m.user=user;
+                return m;
+            });
+            res.render('index', {title: user.username + '의', user: user, memes: memes});
+        }
+
+        var opts = {include: [m.Meme.associations.attachment]};
+        if (user.id == req.session.user_id) {
+            user.getMemes(opts).then(render);
+        } else {
+            opts.where = {$or: [{privacy_level: 'public'}]};
+            if (req.session.user_id) {
+                m.Friend.findOne({
+                    where: {
+                        user_id: user.id,
+                        friend_id: req.session.user_id,
+                        status: "accepted"
+                    }
+                }).then(function (f) {
+                    if (f) {
+                        opts.where.$or.push({privacy_level: 'friends'});
+                    }
+                    user.getMemes(opts).then(render);
+                });
+            } else {
+                user.getMemes(opts).then(render);
+            }
+        }
+    });
+});
+
 module.exports = router;

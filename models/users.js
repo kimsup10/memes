@@ -1,5 +1,7 @@
 var Sequelize = require('sequelize');
 var bcrypt = require('bcrypt');
+var gravatar = require('gravatar');
+
 var db = require('../utils/database.js');
 var es = require('../utils/elasticsearch.js');
 
@@ -30,6 +32,8 @@ var User = db.define('user', {
         return this;
       else
         return false;
+    }, getProfileUrl: function() {
+      return gravatar.url(this.email, {s: '100', r: 'x', d: 'retro'}, true);
     }
   }
 });
