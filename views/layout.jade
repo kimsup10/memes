@@ -14,8 +14,6 @@ html
       div.navbar-collapse.collapse
         ul.nav.navbar-nav
           li
-            a(href='/user/'+session.user_id) My memes
-          li
             a(href='/trending') Trending
           li
             if session.user_id
@@ -30,6 +28,8 @@ html
               a.dropdown-toggle(data-toggle="dropdown", href="#") #{session.username}
                 span.caret
               ul.dropdown-menu
+                li
+                  a(href='/user/' + session.username) 내짤방
                 li
                   a(href="/user/friends") 친구관리
                 li

@@ -2,14 +2,21 @@ extends layout
 
 block content
   script(type='text/javascript' src='/javascripts/copy.js')
-  h1 !{title} 짤방
+  if user
+    h1
+      img.img-rounded.avatar(src=user.getProfileUrl() style="width: 64px; width: 64px;")
+      span= ' '+user.username
+      small= ' '+user.email
+  else
+    h1 !{title} 짤방
   ul.list-unstyled
     each meme in memes
       li
         div.panel.panel-default
           div.panel-heading
+            img.img-rounded.avatar(src=meme.user.getProfileUrl() style="width: 32px; width: 32px;")
             span
-              a(href='/user/'+meme.user.id) #{meme.user.username}
+              a(href='/user/'+meme.user.username)=' '+meme.user.username
             @ #{meme.created_at}
           div.panel-body(id="meme-#{meme.id}")
             img(src=meme.attachment.filepath style="min-width: 512px; max-width: 512px;" onclick='copy('+meme.id+')')

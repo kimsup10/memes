@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var m = require('../models/models.js')
+var gravatar = require('gravatar');
+var m = require('../models/models.js');
 
 // TODO: user page
 router.get('/', function(req, res, next) {
@@ -110,26 +111,40 @@ router.post('/profile', function(req,res,next){
     });
 });
 
-router.get('/:id', function (req, res, next) {
-    var host_id= req.params.id;
-    var cli_id = req.session.user_id;
-
-    if (host_id==cli_id){
-        m.Meme.getListOfUser(host_id, 'private', function (memes) {
-            res.render('index', {title: memes[0].user.username+'의', memes: memes});
-        });
-    }
-
-    m.Friend.findOne({where:{user_id:cli_id, friend_id:host_id, status:"accepted"}}).then(function (f) {
-        // Show only memes in privacy level
-        if (f){
-            var privacy_level= 'friends'
-        } else{
-            var privacy_level = 'public'
+router.get('/:username', function (req, res, next) {
+    m.User.findOne({
+        where: {username: req.params.username}
+    }).then(function (user) {
+        function render(memes) {
+            memes = memes.map(function (m) {
+                m.user=user;
+                return m;
+            });
+            res.render('index', {title: user.username + '의', user: user, memes: memes});
         }
-        m.Meme.getListOfUser(host_id, privacy_level, function (memes) {
-            res.render('index', {title: memes[0].user.username+'의', memes: memes});
-        });
+
+        var opts = {include: [m.Meme.associations.attachment]};
+        if (user.id == req.session.user_id) {
+            user.getMemes(opts).then(render);
+        } else {
+            opts.where = {$or: [{privacy_level: 'public'}]};
+            if (req.session.user_id) {
+                m.Friend.findOne({
+                    where: {
+                        user_id: user.id,
+                        friend_id: req.session.user_id,
+                        status: "accepted"
+                    }
+                }).then(function (f) {
+                    if (f) {
+                        opts.where.$or.push({privacy_level: 'friends'});
+                    }
+                    user.getMemes(opts).then(render);
+                });
+            } else {
+                user.getMemes(opts).then(render);
+            }
+        }
     });
 });
 
