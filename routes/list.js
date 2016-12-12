@@ -58,7 +58,6 @@ router.get('/trending', function (req, res, next) {
     });
 });
 
-
 router.get('/search', function(req, res, next) {
     var query = {
       query: { match: { description: req.query.q }},

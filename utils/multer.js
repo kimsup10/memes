@@ -6,7 +6,6 @@ var storage = multer.diskStorage({
         cb(null, __dirname+'/../public/uploads');
     },
     filename: function (req, file, cb) {
-        console.log(file);
         var extension = file.mimetype.split('/')[1];
         cb(null, uuid()+'.'+extension)
     }

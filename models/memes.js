@@ -21,17 +21,6 @@ var Meme = db.define('meme', {
     }
 });
 
-Meme.getListOfUser = function (user_id, privacy_level, cb) {
-    Meme.findAll({
-        limit: 10,
-        include:0 [Meme.associations.attachment, Meme.associations.user],
-        where: {
-            user_id:user_id,
-            privacy_level: {$lte: privacy_level}
-        }
-    }).then(cb);
-};
-
 Meme.addHook('afterCreate', 'saveES', function(meme, options) {
   es.create({
     index: 'meme',

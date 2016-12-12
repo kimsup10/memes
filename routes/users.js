@@ -27,7 +27,6 @@ router.post('/logout', function(req, res, next){
 });
 
 router.get('/signup', function(req, res, next) {
-    console.log('sign up');
     if (req.session.user_id){
         res.redirect('/');
     } else {
