@@ -53,24 +53,25 @@ router.get('/', function(req, res, next) {
 
 router.get('/trending', function (req, res, next) {
     var page = parseInt(req.query.page || '1');
-    var count = redis.zcount('trending');
-    redis.zrevrange('trending', ((page - 1)*pageLimit), ((page - 1)*pageLimit)+19, function (err, memeIds) {
-        if (err) {
-            res.send(500);
-        } else {
-            m.Meme.findAll({
-                where: { id:{ $in : memeIds } },
-                include: [m.Meme.associations.attachment, m.Meme.associations.user]
-            }).then(function (memes) {
-                var sortedMemes = memeIds.map(function(id) {
-                    var i = memes.findIndex(function(meme){
-                        return meme.id == id;
+    redis.zcard('trending', function (err, count) {
+        redis.zrevrange('trending', ((page - 1)*pageLimit), (page*pageLimit)-1, function (err, memeIds) {
+            if (err) {
+                res.send(500);
+            } else {
+                m.Meme.findAll({
+                    where: { id:{ $in : memeIds } },
+                    include: [m.Meme.associations.attachment, m.Meme.associations.user]
+                }).then(function (memes) {
+                    var sortedMemes = memeIds.map(function(id) {
+                        var i = memes.findIndex(function(meme){
+                            return meme.id == id;
+                        });
+                        return memes.splice(i, 1).pop();
                     });
-                    return memes.splice(i, 1).pop();
+                    res.render('index', { memes: sortedMemes, total: count, page: page, limit: pageLimit });
                 });
-                res.render('index', { memes: sortedMemes, total: count, page: page, limit: pageLimit });
-            });
-        }
+            }
+        });
     });
 });
 
