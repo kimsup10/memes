@@ -20,6 +20,7 @@ app.use(session({
 }));
 app.use(function(req,res,next){
   res.locals.session = req.session;
+  res.locals.url_base = req.protocol + '://' + req.get('host');
   res.locals.urlHelper = function (key, value) {
       return (new URI(req.url)).setQuery(key, value);
   };

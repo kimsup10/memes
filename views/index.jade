@@ -1,5 +1,9 @@
 extends layout
 
+block meta_head
+  meta(property="og:url" content=url_base)
+  meta(property="og:title" content="짤방")
+
 block content
   script(type='text/javascript' src='/javascripts/copy.js')
   if user
@@ -25,6 +29,7 @@ block content
                 label.btn.glyphicon.glyphicon-edit(aria-hidden="true" style="float:right;color:black;width: 32px; width: 32px; ")
 
           div.panel-body(id="meme-#{meme.id}")
-            img(src=meme.attachment.filepath style="min-width: 512px; max-width: 512px;" onclick='copy('+meme.id+')')
+            a(href="/memes/#{meme.id}")
+              img(src=meme.attachment.filepath style="min-width: 512px; max-width: 512px;" ondragleave='dragged('+meme.id+')')
           div.panel-footer= meme.description
   include paging

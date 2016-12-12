@@ -5,6 +5,15 @@ var redis = require('../utils/redis');
 
 var router = express.Router();
 
+router.get("/:id",function(req,res,next) {
+    m.Meme.find({
+        include: [m.Meme.associations.attachment, m.Meme.associations.user],
+        where: {id: req.params.id}
+    }).then(function (meme) {
+        res.render('meme', {meme: meme});
+    });
+});
+
 router.post('/:id/copy', function (req, res) {
     var key = 'meme:'+req.params.id;
     m.Meme.findOne({
