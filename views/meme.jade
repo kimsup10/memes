@@ -1,9 +1,10 @@
 extends layout
 
 block meta_head
-    meta(property="og:title" content="짤방")
+    meta(property="og:title" content="짤방 by "+meme.user.username)
     meta(property="og:url" content=url_base+'/memes/'+meme.id)
     meta(property="og:image" content=url_base+meme.attachment.filepath)
+    meta(property="og:description" content=meme.description)
 
 block content
     script(type='text/javascript' src='/javascripts/copy.js')
