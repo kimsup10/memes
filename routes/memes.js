@@ -21,7 +21,27 @@ router.get("/:id",function(req,res,next) {
         include: [m.Meme.associations.attachment, m.Meme.associations.user],
         where: {id: req.params.id}
     }).then(function (meme) {
-        res.render('meme', {meme: meme});
+        if (meme.privacy_level == 'public' || req.session.user_id == meme.user_id) {
+            res.render('meme', {meme: meme});
+        } else {
+            if (meme.privacy_level == 'private') {
+                req.flash('권한이 없습니다.')
+                res.redirect(403, '/');
+            } else {
+                m.Friend.findOne({where: {
+                    user_id: meme.user_id,
+                    friend_id: req.session.user_id,
+                    status: 'accepted'
+                }}).then(function(f){
+                    if (f) {
+                        res.render('meme', {meme: meme});
+                    } else {
+                        req.flash('권한이 없습니다.')
+                        res.redirect(403, '/');
+                    }
+                });
+            }
+        }
     });
 });
 

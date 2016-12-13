@@ -27,7 +27,6 @@ block content
                 label.btn.glyphicon.glyphicon-remove(aria-hidden="true" style="float:right;color:black;width: 32px; width: 32px;")
               a(href='/memes/' + meme.id + '/edit')
                 label.btn.glyphicon.glyphicon-edit(aria-hidden="true" style="float:right;color:black;width: 32px; width: 32px; ")
-
           div.panel-body(id="meme-#{meme.id}")
             a(href="/memes/#{meme.id}")
               img(src=meme.attachment.filepath style="min-width: 512px; max-width: 512px;" ondragleave='dragged('+meme.id+')')
