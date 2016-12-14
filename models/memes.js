@@ -1,6 +1,7 @@
 var Sequelize = require('sequelize');
 var db = require('../utils/database.js');
 var es = require('../utils/elasticsearch.js');
+var redis = require('../utils/redis.js');
 
 var Meme = db.define('meme', {
     id: {
@@ -49,6 +50,31 @@ Meme.addHook('afterBulkCreate', 'saveES', function(memes, options) {
   });
 });
 
+Meme.addHook('afterUpdate', 'saveES', function(meme, options) {
+  es.update({
+    index: 'meme',
+    type: 'meme',
+    id: meme.id,
+    body: { doc: {
+      privacy_level: meme.privacy_level,
+      description: meme.description
+    }}
+  }, function(error, response) {
+  });
+});
+
+Meme.addHook('afterUpdate', 'updateTrending', function(meme, options) {
+  if (meme.privacy_level != 'public') {
+    var logger = function(err, reply) {
+      if (err) {
+        console.log(err);
+      }
+    };
+    redis.del('meme:'+meme.id, logger);
+    redis.zrem('trending', meme.id, logger);
+  }
+});
+
 Meme.addHook('afterDestroy', 'saveES', function(meme, options) {
   es.delete({
     index: 'meme',
@@ -56,6 +82,16 @@ Meme.addHook('afterDestroy', 'saveES', function(meme, options) {
     id: meme.id
   }, function(error, response) {
   });
+});
+
+Meme.addHook('afterDestroy', 'updateTrending', function(meme, options) {
+  var logger = function(err, reply) {
+    if (err) {
+      console.log(err);
+    }
+  };
+  redis.del('meme:'+meme.id, logger);
+  redis.zrem('trending', meme.id, logger);
 });
 
 module.exports = Meme;

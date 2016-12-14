@@ -51,6 +51,19 @@ User.addHook('afterCreate', 'saveES', function(user, options) {
   });
 });
 
+User.addHook('afterUpdate', 'saveES', function(user, options) {
+  es.update({
+    index: 'meme',
+    type: 'user',
+    id: user.id,
+    body: { doc: {
+      username: user.username,
+      email: user.email
+    }}
+  }, function(error, response) {
+  });
+});
+
 User.addHook('afterDestroy', 'saveES', function(user, options) {
   es.delete({
     index: 'meme',

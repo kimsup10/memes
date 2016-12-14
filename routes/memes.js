@@ -90,11 +90,15 @@ router.get('/:id/edit', function (req, res) {
 });
 
 router.post('/:id/edit', function (req, res) {
-    m.Meme.update({
-        description: req.body.description,
-        privacy_level:req.body.privacy_level
-    }, {where:{id:req.params.id}, returning:true}).then(function (m) {
-        res.redirect('/memes/'+req.params.id);
+    m.Meme.findOne({
+        where: {id:req.params.id},
+    }).then(function (m) {
+        m.update({
+            description: req.body.description,
+            privacy_level: req.body.privacy_level
+        }).then(function(m) {
+            res.redirect('/memes/'+req.params.id);
+        });
     });
 });
 
