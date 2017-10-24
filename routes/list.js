@@ -75,57 +75,57 @@ router.get('/trending', function (req, res, next) {
     });
 });
 
-router.get('/search', function(req, res, next) {
-    var page = parseInt(req.query.page || '1');
-    var query = {
-      query: { match: { description: req.query.q }},
-      filter: {
-        or: [
-          { term: { privacy_level: 'public'}}
-        ]
-      }
-    };
-    function executeQueryAndRender() {
-        es.search({
-            index: 'meme',
-            type: 'meme',
-            body: query,
-            from: ((page - 1) * pageLimit),
-            size: pageLimit
-        }, function(err, resp) {
-            if (err) {
-                res.send(500);
-            } else {
-                memes_id = resp.hits.hits.map(function(meme) {
-                    return Number(meme._id);
-                });
-                m.Meme.findAll({
-                    include: [m.Meme.associations.attachment, m.Meme.associations.user],
-                    where: {
-                        id: {$in: memes_id}
-                    }
-                }).then(function (memes) {
-                    res.render('index', {memes: memes, total: resp.hits.total , page: page, limit: pageLimit});
-                });
-            }
-        });
-    }
-    if (req.session.user_id) {
-        m.Friend.findValidFriendIdsByUserId(req.session.user_id, function(friends_ids) {
-            friends_ids.push(req.session.user_id);
-            query.filter.or.push({and: [
-              {term: {privacy_level: 'friends'}},
-              {terms: {user_id: friends_ids }}
-            ]});
-            query.filter.or.push({and: [
-              {term: {privacy_level: 'private'}},
-              {term: {user_id: req.session.user_id }}
-            ]});
-            executeQueryAndRender();
-        });
-    } else {
-        executeQueryAndRender();
-    }
-});
+// router.get('/search', function(req, res, next) {
+//     var page = parseInt(req.query.page || '1');
+//     var query = {
+//       query: { match: { description: req.query.q }},
+//       filter: {
+//         or: [
+//           { term: { privacy_level: 'public'}}
+//         ]
+//       }
+//     };
+//     function executeQueryAndRender() {
+//         es.search({
+//             index: 'meme',
+//             type: 'meme',
+//             body: query,
+//             from: ((page - 1) * pageLimit),
+//             size: pageLimit
+//         }, function(err, resp) {
+//             if (err) {
+//                 res.send(500);
+//             } else {
+//                 memes_id = resp.hits.hits.map(function(meme) {
+//                     return Number(meme._id);
+//                 });
+//                 m.Meme.findAll({
+//                     include: [m.Meme.associations.attachment, m.Meme.associations.user],
+//                     where: {
+//                         id: {$in: memes_id}
+//                     }
+//                 }).then(function (memes) {
+//                     res.render('index', {memes: memes, total: resp.hits.total , page: page, limit: pageLimit});
+//                 });
+//             }
+//         });
+//     }
+//     if (req.session.user_id) {
+//         m.Friend.findValidFriendIdsByUserId(req.session.user_id, function(friends_ids) {
+//             friends_ids.push(req.session.user_id);
+//             query.filter.or.push({and: [
+//               {term: {privacy_level: 'friends'}},
+//               {terms: {user_id: friends_ids }}
+//             ]});
+//             query.filter.or.push({and: [
+//               {term: {privacy_level: 'private'}},
+//               {term: {user_id: req.session.user_id }}
+//             ]});
+//             executeQueryAndRender();
+//         });
+//     } else {
+//         executeQueryAndRender();
+//     }
+// });
 
 module.exports = router;
