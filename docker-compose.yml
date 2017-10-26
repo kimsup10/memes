@@ -1,16 +1,38 @@
 version: '2'
 services:
-  webapp:
+  webapp1:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: meme-webapp
+    container_name: meme-webapp-1
     ports:
       - "3000:3000"
     depends_on:
       - postgres
       - redis
 #      - elasticsearch
+  webapp2:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: meme-webapp-2
+      ports:
+        - "3001:3000"
+      depends_on:
+        - postgres
+        - redis
+  #      - elasticsearch
+  webapp3:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: meme-webapp-3
+      ports:
+        - "3002:3000"
+      depends_on:
+        - postgres
+        - redis
+  #      - elasticsearch
 #  elasticsearch:
 #    build:
 #      context: .
@@ -32,4 +54,6 @@ services:
         - "80:80"
         - "443:443"
       links:
-        - webapp
+        - webapp1
+        - webapp2
+        - webapp3
