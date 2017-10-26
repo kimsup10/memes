@@ -5,6 +5,7 @@ var db = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost:5432/me
     min: 0,
     idle: 10000
   },
+  logging: false
 });
 
 module.exports = db;

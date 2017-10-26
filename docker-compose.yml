@@ -5,6 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: meme-webapp-1
+    volumes:
+      - meme-volume:/webapp/public
     ports:
       - "3000:3000"
     depends_on:
@@ -12,33 +14,27 @@ services:
       - redis
 #      - elasticsearch
   webapp2:
-      build:
-        context: .
-        dockerfile: Dockerfile
-      container_name: meme-webapp-2
-      ports:
-        - "3001:3000"
-      depends_on:
-        - postgres
-        - redis
-  #      - elasticsearch
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: meme-webapp-2
+    ports:
+      - "3001:3000"
+    depends_on:
+      - postgres
+      - redis
+#     - elasticsearch
   webapp3:
-      build:
-        context: .
-        dockerfile: Dockerfile
-      container_name: meme-webapp-3
-      ports:
-        - "3002:3000"
-      depends_on:
-        - postgres
-        - redis
-  #      - elasticsearch
-#  elasticsearch:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile.es-ko
-#    image: wsdg4/elasticsearch
-#    container_name: meme-es
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: meme-webapp-3
+    ports:
+      - "3002:3000"
+    depends_on:
+      - postgres
+      - redis
+  #    - elasticsearch
   postgres:
     image: postgres
     container_name: meme-db
@@ -57,3 +53,6 @@ services:
         - webapp1
         - webapp2
         - webapp3
+
+volumes:
+  meme-volume:

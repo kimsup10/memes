@@ -20,5 +20,4 @@ ENV REDIS_URL redis://meme-redis/0
 ENV ELASTICSEARCH_HOST meme-es:9200
 RUN chmod +x scripts/start_server.sh
 CMD ./scripts/start_server.sh
-VOLUME ["/webapp/public/uploads"]
 EXPOSE 3000
