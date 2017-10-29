@@ -25,11 +25,3 @@ $ docker-compose down
 ```bash
 $ docker-compose build webapp
 ```
-
-- Package & Loading
-```bash
-$ docker save postgres redis wsdg4/elasticsearch | gzip -c > wsdg4_webapp_dependency.tar.gz
-$ docker save wsdg4/webapp | gzip -c > wsdg4_webapp.tar.gz
-$ docker load -i wsdg4_dependency.tar.gz
-$ docker load -i wsdg4_webapp.tar.gz
-```
