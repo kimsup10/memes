@@ -8,7 +8,7 @@ deploy
 - Run
 ```bash
 $ git submodule update --init
-$ docker-compose up -d
+$ docker-compose up --scale webapp=3
 ```
 
 - Stop
