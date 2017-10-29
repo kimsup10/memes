@@ -1,4 +1,4 @@
-deploy
+Memes
 ======
 - Install [Docker][docker-install] & [Docker-compose][docker-compose-install]
 
