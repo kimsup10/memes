@@ -1,0 +1,31 @@
+version: '2'
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - meme-volume:/webapp/public
+    depends_on:
+      - postgres
+      - redis
+#      - elasticsearch
+  postgres:
+    image: postgres
+    container_name: meme-db
+  redis:
+    image: redis
+    container_name: meme-redis
+  nginx:
+      build:
+        context: .
+        dockerfile: Dockerfile.nginx
+      hostname: nginx
+      ports:
+        - "80:80"
+        - "443:443"
+      links:
+        - webapp
+
+volumes:
+  meme-volume:

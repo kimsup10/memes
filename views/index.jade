@@ -21,7 +21,7 @@ block content
             img.img-rounded.avatar(src=meme.user.getProfileUrl() style="width: 32px; width: 32px;")
             span
               a(href='/user/'+meme.user.username)=' '+meme.user.username
-            @ #{meme.created_at}
+              | @ #{meme.created_at}
             if session.username == meme.user.username
               a(href='/memes/'+meme.id+'/delete')
                 label.btn.glyphicon.glyphicon-remove(aria-hidden="true" style="float:right;color:black;width: 32px; width: 32px;")
