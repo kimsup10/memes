@@ -20,6 +20,8 @@ services:
       build:
         context: .
         dockerfile: Dockerfile.nginx
+      volumes:
+        - meme-volume:/webapp/public
       hostname: nginx
       ports:
         - "80:80"
